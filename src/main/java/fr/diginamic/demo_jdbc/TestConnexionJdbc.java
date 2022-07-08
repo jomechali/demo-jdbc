@@ -17,12 +17,15 @@ public class TestConnexionJdbc {
 		DB_USER = bundle.getString("jdbc.log.USER");
 		DB_PWD = bundle.getString("jdbc.log.PWD");
 	}
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args){
 
-		Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PWD);
+		try(Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PWD)) {
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		System.out.println(connection);
-		connection.close();
 	}
 
 }
