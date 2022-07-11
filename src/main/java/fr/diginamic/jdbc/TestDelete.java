@@ -17,6 +17,7 @@ public class TestDelete {
 		try {
 
 			System.out.println(fournisseurDao.delete(fournisseurToDelete));
+			fournisseurDao.delete(new Fournisseur(5, "L'Espace Création"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();

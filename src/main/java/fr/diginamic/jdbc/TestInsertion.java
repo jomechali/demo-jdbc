@@ -14,6 +14,7 @@ public class TestInsertion {
 
 		try {
 			fournisseurDao.insert(new Fournisseur(4, "La Maison de la Peinture"));
+			fournisseurDao.insert(new Fournisseur(5, "L'Espace Création"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

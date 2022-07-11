@@ -1,9 +1,9 @@
 package fr.diginamic.jdbc.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +11,19 @@ import fr.diginamic.jdbc.entities.Fournisseur;
 
 public class FournisseurDaoJdbc implements FournisseurDao {
 
+	private static final String FIND_ALL_QUERY = "SELECT * FROM FOURNISSEUR";
+	private static final String INSERT_INTO = "INSERT INTO FOURNISSEUR(ID, NOM) VALUES (?, ?)";
+	private static final String UPDATE = "UPDATE FOURNISSEUR SET NOM = ? WHERE NOM = ?";
+	private static final String DELETE = "DELETE FROM FOURNISSEUR WHERE NOM = ? AND ID = ?";
+
 	@Override
 	public List<Fournisseur> extraire() throws SQLException {
 		List<Fournisseur> fournisseurs = new ArrayList<>();
 
 		Connection connection = PersistenceManager.getConnection();
 
-		try (Statement statement = connection.createStatement();
-				ResultSet cursor = statement.executeQuery("SELECT * FROM FOURNISSEUR")) {
+		try (PreparedStatement pst = connection.prepareStatement(FIND_ALL_QUERY);
+				ResultSet cursor = pst.executeQuery()) {
 
 			while (cursor.next()) {
 				fournisseurs.add(new Fournisseur(cursor.getInt(1), cursor.getString(2)));
@@ -32,9 +37,10 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 	public void insert(Fournisseur fournisseur) throws SQLException {
 
 		Connection connection = PersistenceManager.getConnection();
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate("INSERT INTO FOURNISSEUR(ID, NOM) VALUES ('%d', '%s')"
-					.formatted(fournisseur.getId(), fournisseur.getNom()));
+		try (PreparedStatement pst = connection.prepareStatement(INSERT_INTO)) {
+			pst.setInt(1, fournisseur.getId());
+			pst.setString(2, fournisseur.getNom());
+			pst.executeUpdate();
 		}
 
 	}
@@ -44,10 +50,12 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 		Connection connection = PersistenceManager.getConnection();
 
 		int modifiedLines = 0;
-		
-		try (Statement statement = connection.createStatement()) {
-			modifiedLines = statement.executeUpdate(
-					"UPDATE FOURNISSEUR SET NOM = '%s' WHERE NOM = '%s'".formatted(nouveauNom, ancienNom));
+
+		try (PreparedStatement pst = connection.prepareStatement(UPDATE)) {
+			pst.setString(1, nouveauNom);
+			pst.setString(2, ancienNom);
+
+			modifiedLines = pst.executeUpdate();
 
 		}
 		return modifiedLines;
@@ -57,9 +65,10 @@ public class FournisseurDaoJdbc implements FournisseurDao {
 	public boolean delete(Fournisseur fournisseur) throws SQLException {
 
 		Connection connection = PersistenceManager.getConnection();
-		try (Statement statement = connection.createStatement()) {
-			statement.executeUpdate("DELETE FROM FOURNISSEUR WHERE NOM = '%s' AND ID = '%d'"
-					.formatted(fournisseur.getNom(), fournisseur.getId()));
+		try (PreparedStatement pst = connection.prepareStatement(DELETE)) {
+			pst.setString(1, fournisseur.getNom());
+			pst.setInt(2, fournisseur.getId());
+			pst.executeUpdate();
 		}
 		return true;
 	}
