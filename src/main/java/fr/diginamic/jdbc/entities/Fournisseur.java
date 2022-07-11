@@ -8,8 +8,8 @@ package fr.diginamic.jdbc.entities;
  */
 public class Fournisseur {
 
-	private int Id;
-	private String Nom;
+	private int id;
+	private String nom;
 	/**
 	 * Constructor
 	 * @param id
@@ -17,16 +17,16 @@ public class Fournisseur {
 	 */
 	public Fournisseur(int id, String nom) {
 		super();
-		Id = id;
-		Nom = nom;
+		this.id = id;
+		this.nom = nom;
 	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Fournisseur [Id=");
-		builder.append(Id);
+		builder.append(id);
 		builder.append(", Nom=");
-		builder.append(Nom);
+		builder.append(nom);
 		builder.append("]");
 		return builder.toString();
 	}
@@ -35,28 +35,28 @@ public class Fournisseur {
 	 * @return the id
 	 */
 	public int getId() {
-		return Id;
+		return id;
 	}
 	/**
 	 * Setter
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
-		Id = id;
+		this.id = id;
 	}
 	/**
 	 * Getter
 	 * @return the nom
 	 */
 	public String getNom() {
-		return Nom;
+		return nom;
 	}
 	/**
 	 * Setter
 	 * @param nom the nom to set
 	 */
 	public void setNom(String nom) {
-		Nom = nom;
+		this.nom = nom;
 	}
 	
 	
